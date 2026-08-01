@@ -6,7 +6,7 @@
   const POLL_MS = 6000;
 
   // After running `npx web-push generate-vapid-keys`, paste the PUBLIC key here.
-  const VAPID_PUBLIC_KEY = "PASTE_YOUR_VAPID_PUBLIC_KEY_HERE";
+  const VAPID_PUBLIC_KEY = "BC9JjQgu_r291Gq6oy9K9ltpH3nBPfZrSAHyJVLyqMbVr7SVTqfweXT8yITWDV29r-Is-K3B6b9-cwJVIqo0cdU";
 
   const root = document.getElementById("app");
 
