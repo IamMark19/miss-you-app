@@ -1,4 +1,4 @@
-const CACHE_NAME = "miss-you-v2";
+const CACHE_NAME = "miss-you-v3";
 const APP_SHELL = ["/", "/index.html", "/style.css", "/app.js", "/api.js", "/manifest.json"];
 
 self.addEventListener("install", (event) => {

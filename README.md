@@ -63,6 +63,18 @@ from `.env.example`: `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`,
 `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` (any `mailto:`
 address is fine). Redeploy after adding them (`vercel --prod`).
 
+`vercel.json` sets `Cache-Control: no-cache, must-revalidate` on
+`index.html`, `style.css`, `app.js`, `api.js`, `manifest.json`, and the
+service worker, so future updates always get picked up instead of an old
+cached copy quietly sticking around.
+
+> **Already installed this on a phone from an earlier deploy?** That phone
+> may still be showing cached files from before this fix existed. Uninstall
+> the app from the home screen and reopen the URL fresh in the browser once
+> (or, in the browser's site settings, clear storage/data for the site) —
+> that forces it to fetch everything new. After that one-time reset, updates
+> should just work on reopen.
+
 ### 5. Set up both phones
 Open your deployed URL on your phone, tap **Create a pair**, and you'll get a
 6-character code — text it to her however you normally would. She opens the
