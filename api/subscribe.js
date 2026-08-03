@@ -1,6 +1,4 @@
-const { createClient } = require("@supabase/supabase-js");
-
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
+const { supabase } = require("../lib/supabase");
 
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
@@ -8,18 +6,21 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const { name, subscription } = req.body || {};
-  if (!name || typeof name !== "string" || !subscription || !subscription.endpoint) {
-    res.status(400).json({ error: "Missing name or subscription" });
+  const { pairId, name, subscription } = req.body || {};
+  if (!pairId || !name || typeof name !== "string" || !subscription || !subscription.endpoint) {
+    res.status(400).json({ error: "Missing pairId, name, or subscription" });
     return;
   }
 
-  const { error } = await supabase
-    .from("subscriptions")
-    .upsert(
-      { name: name.trim().slice(0, 40), endpoint: subscription.endpoint, subscription },
-      { onConflict: "endpoint" }
-    );
+  const { error } = await supabase.from("subscriptions").upsert(
+    {
+      pair_id: pairId,
+      name: name.trim().slice(0, 40),
+      endpoint: subscription.endpoint,
+      subscription,
+    },
+    { onConflict: "endpoint" }
+  );
 
   if (error) {
     console.error("save subscription failed", error);

@@ -1,5 +1,5 @@
-const CACHE_NAME = "miss-you-v1";
-const APP_SHELL = ["/", "/index.html", "/style.css", "/app.js", "/manifest.json"];
+const CACHE_NAME = "miss-you-v2";
+const APP_SHELL = ["/", "/index.html", "/style.css", "/app.js", "/api.js", "/manifest.json"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -44,22 +44,24 @@ self.addEventListener("push", (event) => {
   } catch (e) {
     data = {};
   }
+  const isMessage = data.type === "message";
   const title = data.title || "Miss You";
   const options = {
-    body: data.body || "They miss you.",
+    body: data.body || "",
     icon: "/icons/icon-192.png",
     badge: "/icons/icon-192.png",
-    vibrate: [100, 50, 100],
-    tag: "miss-you-signal",
+    vibrate: isMessage ? [60, 40, 60, 40, 60] : [100, 50, 100],
+    tag: isMessage ? "miss-you-message" : "miss-you-signal",
     renotify: true,
     data: { url: "/" },
   };
+  const clientMessageType = isMessage ? "NEW_MESSAGE" : "NEW_SIGNAL";
 
   event.waitUntil(
     Promise.all([
       self.registration.showNotification(title, options),
       self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((list) => {
-        list.forEach((client) => client.postMessage({ type: "NEW_SIGNAL" }));
+        list.forEach((client) => client.postMessage({ type: clientMessageType }));
       }),
     ])
   );

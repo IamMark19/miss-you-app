@@ -12,17 +12,18 @@ module.exports = async function handler(req, res) {
   }
 
   const { data, error } = await supabase
-    .from("signals")
-    .select("name, kind, ts")
+    .from("messages")
+    .select("name, text, ts")
     .eq("pair_id", pairId)
     .order("ts", { ascending: false })
-    .limit(150);
+    .limit(200);
 
   if (error) {
-    console.error("fetch signals failed", error);
-    res.status(500).json({ error: "Could not load signals" });
+    console.error("fetch messages failed", error);
+    res.status(500).json({ error: "Could not load messages" });
     return;
   }
 
-  res.status(200).json({ signals: data || [] });
+  // Return oldest-first, which is the natural reading order for a chat thread.
+  res.status(200).json({ messages: (data || []).slice().reverse() });
 };

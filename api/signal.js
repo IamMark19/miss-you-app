@@ -1,15 +1,10 @@
-const { createClient } = require("@supabase/supabase-js");
-const webpush = require("web-push");
+const { supabase } = require("../lib/supabase");
+const { notifyPair } = require("../lib/push");
 
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
-
-if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
-  webpush.setVapidDetails(
-    process.env.VAPID_SUBJECT || "mailto:you@example.com",
-    process.env.VAPID_PUBLIC_KEY,
-    process.env.VAPID_PRIVATE_KEY
-  );
-}
+const COPY = {
+  miss: (name) => `${name} misses you 💛`,
+  kiss: (name) => `${name} sent you a flying kiss 😘`,
+};
 
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
@@ -17,51 +12,30 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const { name } = req.body || {};
-  if (!name || typeof name !== "string" || !name.trim()) {
-    res.status(400).json({ error: "Missing name" });
+  const { pairId, name, kind } = req.body || {};
+  const cleanKind = kind === "kiss" ? "kiss" : "miss";
+  if (!pairId || !name || typeof name !== "string" || !name.trim()) {
+    res.status(400).json({ error: "Missing pairId or name" });
     return;
   }
   const cleanName = name.trim().slice(0, 40);
   const ts = Date.now();
 
-  const { error: insertError } = await supabase.from("signals").insert({ name: cleanName, ts });
+  const { error: insertError } = await supabase
+    .from("signals")
+    .insert({ pair_id: pairId, name: cleanName, kind: cleanKind, ts });
   if (insertError) {
     console.error("insert signal failed", insertError);
     res.status(500).json({ error: "Could not save signal" });
     return;
   }
 
-  // Notify everyone whose saved identity isn't the sender.
-  try {
-    const { data: subs, error: subError } = await supabase
-      .from("subscriptions")
-      .select("*")
-      .neq("name", cleanName);
-
-    if (!subError && subs && subs.length && process.env.VAPID_PRIVATE_KEY) {
-      const payload = JSON.stringify({
-        title: "Miss You",
-        body: `${cleanName} misses you 💛`,
-      });
-      await Promise.allSettled(
-        subs.map(async (s) => {
-          try {
-            await webpush.sendNotification(s.subscription, payload);
-          } catch (err) {
-            if (err && (err.statusCode === 404 || err.statusCode === 410)) {
-              await supabase.from("subscriptions").delete().eq("id", s.id);
-            } else {
-              console.error("push send failed", err && err.message);
-            }
-          }
-        })
-      );
-    }
-  } catch (e) {
-    // Signal was already saved — a push failure shouldn't fail the request.
-    console.error("push notification step failed", e);
-  }
+  await notifyPair(pairId, cleanName, {
+    type: "signal",
+    kind: cleanKind,
+    title: "Miss You",
+    body: COPY[cleanKind](cleanName),
+  });
 
   res.status(200).json({ ok: true, ts });
 };
