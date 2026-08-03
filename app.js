@@ -7,7 +7,7 @@ const KEY_NOTIFY_DISMISSED = "mya_notify_dismissed";
 const POLL_MS = 6000;
 
 // After running `npx web-push generate-vapid-keys`, paste the PUBLIC key here.
-const VAPID_PUBLIC_KEY = "PASTE_YOUR_VAPID_PUBLIC_KEY_HERE";
+const VAPID_PUBLIC_KEY = "BCeuXRcL5EBwH_uM34jQ-EWeV1paDUBypHVWLBAB3qW7yZCZ3pFuGWV9zs8Ib87lvnB6tnQRj5_oJQ0vjEYo2PE";
 
 const root = document.getElementById("app");
 
