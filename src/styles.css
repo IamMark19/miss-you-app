@@ -34,7 +34,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-#app {
+.mya-root {
   position: relative;
   min-height: 100dvh;
   width: 100%;
@@ -166,9 +166,7 @@ body {
 .mya-btn-primary:focus-visible,
 .mya-btn-ghost:focus-visible,
 .mya-input:focus-visible,
-.mya-switch:focus-visible,
-.mya-orb:focus-visible,
-.mya-install-btn:focus-visible {
+.mya-orb:focus-visible {
   outline: 3px solid var(--cream);
   outline-offset: 3px;
 }
@@ -199,15 +197,6 @@ body {
 }
 .mya-ios-steps b { color: var(--cream); }
 
-.mya-app {
-  position: relative;
-  z-index: 1;
-  max-width: 420px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 22px 18px 10px;
-}
-
 .mya-header {
   display: flex;
   align-items: center;
@@ -227,19 +216,6 @@ body {
   font-weight: 500;
   color: var(--cream);
 }
-.mya-switch {
-  background: none;
-  border: none;
-  color: var(--lavender-dim);
-  font-size: 12px;
-  font-family: var(--font-body);
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  padding: 6px;
-  white-space: nowrap;
-}
-.mya-switch:hover { color: var(--lavender); }
 
 .mya-banner {
   margin-top: 14px;
@@ -745,9 +721,151 @@ body {
   text-align: center;
 }
 
+/* ---------- settings gear + panel ---------- */
+.mya-settings-gear {
+  background: none;
+  border: none;
+  color: var(--lavender);
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+.mya-settings-gear:hover {
+  color: var(--cream);
+}
+.mya-settings-gear svg {
+  width: 20px;
+  height: 20px;
+}
+
+.mya-settings-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(13, 12, 34, 0.72);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+  display: flex;
+  align-items: flex-end;
+  animation: mya-fade-in 0.2s ease;
+}
+@keyframes mya-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.mya-settings-panel {
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: var(--bg-mid);
+  border: 1px solid var(--card-border);
+  border-bottom: none;
+  border-radius: 22px 22px 0 0;
+  padding: 20px 20px calc(20px + env(safe-area-inset-bottom, 0px));
+  animation: mya-sheet-up 0.25s ease;
+}
+@keyframes mya-sheet-up {
+  from { transform: translateY(24px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.mya-settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.mya-settings-header h2 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--cream);
+  margin: 0;
+}
+.mya-settings-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--card);
+  color: var(--lavender);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.mya-settings-close:hover {
+  color: var(--cream);
+}
+
+.mya-settings-section {
+  padding: 16px 0;
+  border-top: 1px solid var(--card-border);
+}
+.mya-settings-section:first-of-type {
+  border-top: none;
+  padding-top: 10px;
+}
+.mya-settings-label {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lavender-dim);
+  margin: 0 0 10px;
+}
+.mya-settings-value {
+  font-size: 14px;
+  color: var(--lavender);
+  margin: 0 0 8px;
+  line-height: 1.5;
+}
+.mya-settings-code {
+  font-family: var(--font-display);
+  letter-spacing: 0.1em;
+  color: var(--gold-soft);
+  font-weight: 600;
+}
+
+.mya-avatar-btn--sm {
+  width: 64px;
+  height: 64px;
+  margin: 0 0 14px;
+}
+
+.mya-btn-logout {
+  width: 100%;
+  margin-top: 18px;
+  padding: 13px;
+  border-radius: 12px;
+  border: 1px solid rgba(240, 135, 158, 0.35);
+  background: rgba(240, 135, 158, 0.08);
+  color: var(--rose);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.mya-btn-logout:hover {
+  background: rgba(240, 135, 158, 0.16);
+}
+.mya-btn-logout:focus-visible,
+.mya-settings-close:focus-visible,
+.mya-settings-gear:focus-visible {
+  outline: 3px solid var(--cream);
+  outline-offset: 2px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .mya-orb, .mya-star, .mya-loading-orb, .mya-ripple, .mya-particle, .mya-feed-item,
-  .mya-kiss-btn, .mya-kiss-particle, .mya-msg {
+  .mya-kiss-btn, .mya-kiss-particle, .mya-msg, .mya-settings-overlay, .mya-settings-panel {
     animation: none !important;
   }
 }

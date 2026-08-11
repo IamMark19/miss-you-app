@@ -38,5 +38,6 @@ export const api = {
   postMessage: (pairId, name, text) => jsonPost("/api/message", { pairId, name, text }),
   fetchMessages: (pairId) => request(`/api/messages?pairId=${encodeURIComponent(pairId)}`),
 
-  subscribePush: (pairId, name, subscription) => jsonPost("/api/subscribe", { pairId, name, subscription }),
+  subscribePush: (pairId, name, subscription) =>
+    jsonPost("/api/subscribe", { pairId, name, subscription }),
 };

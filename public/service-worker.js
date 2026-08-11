@@ -1,5 +1,8 @@
-const CACHE_NAME = "miss-you-v3";
-const APP_SHELL = ["/", "/index.html", "/style.css", "/app.js", "/api.js", "/manifest.json"];
+const CACHE_NAME = "miss-you-v4";
+// Vite content-hashes JS/CSS filenames on every build, so they can't be
+// listed here — the fetch handler below caches them at runtime on first
+// load instead. Only the unhashed entry points are worth pre-caching.
+const APP_SHELL = ["/", "/manifest.json"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
