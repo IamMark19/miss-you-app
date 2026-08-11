@@ -1,6 +1,6 @@
-const { supabase } = require("../lib/supabase");
+import { supabase } from "../lib/supabase.js";
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== "GET") {
     res.status(405).json({ error: "Method not allowed" });
     return;
@@ -26,4 +26,4 @@ module.exports = async function handler(req, res) {
 
   // Return oldest-first, which is the natural reading order for a chat thread.
   res.status(200).json({ messages: (data || []).slice().reverse() });
-};
+}

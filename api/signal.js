@@ -1,12 +1,12 @@
-const { supabase } = require("../lib/supabase");
-const { notifyPair } = require("../lib/push");
+import { supabase } from "../lib/supabase.js";
+import { notifyPair } from "../lib/push.js";
 
 const COPY = {
   miss: (name) => `${name} misses you 💛`,
   kiss: (name) => `${name} sent you a flying kiss 😘`,
 };
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.status(405).json({ error: "Method not allowed" });
     return;
@@ -38,4 +38,4 @@ module.exports = async function handler(req, res) {
   });
 
   res.status(200).json({ ok: true, ts });
-};
+}
