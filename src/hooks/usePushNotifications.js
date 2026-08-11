@@ -3,7 +3,7 @@ import { api } from "../api.js";
 import { urlBase64ToUint8Array } from "../utils.js";
 
 // After running `npx web-push generate-vapid-keys`, paste the PUBLIC key here.
-const VAPID_PUBLIC_KEY = "BCeuXRcL5EBwH_uM34jQ-EWeV1paDUBypHVWLBAB3qW7yZCZ3pFuGWV9zs8Ib87lvnB6tnQRj5_oJQ0vjEYo2PE";
+const VAPID_PUBLIC_KEY = "BOcrHyvGEUMXY-c80od0Uy_O2xD6lyC_9DAwu02tIREFZSSjDjHun128YPG_ybnCM8tDsQGWxACCbJU3_huA6So";
 
 export function usePushNotifications(pairId, identity) {
   const enable = useCallback(async () => {
